@@ -733,8 +733,6 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   line-height: 1;
   margin-bottom: 8px;
 }
-.stat__number::after { content: '%'; }
-.stat:nth-child(3) .stat__number::after { content: ' Days'; font-size: 1.5rem; }
 
 .stat__label {
   font-size: .875rem;
