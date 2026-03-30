@@ -509,6 +509,12 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   margin-bottom: 16px;
 }
 
+.receptionist-icon {
+  width: 64px;
+  height: 64px;
+  display: block;
+}
+
 .service-card h3 {
   font-size: 1.15rem;
   font-weight: 700;

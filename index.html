@@ -131,7 +131,46 @@
       <div class="services-grid">
 
         <div class="service-card service-card--featured">
-          <div class="service-card__icon">🤖</div>
+          <div class="service-card__icon">
+            <svg class="receptionist-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" aria-label="Friendly receptionist with headset">
+              <defs>
+                <linearGradient id="rGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0d9488"/>
+                  <stop offset="100%" stop-color="#0ea5e9"/>
+                </linearGradient>
+                <clipPath id="rClip">
+                  <circle cx="36" cy="36" r="36"/>
+                </clipPath>
+              </defs>
+              <!-- Background circle -->
+              <circle cx="36" cy="36" r="36" fill="url(#rGrad)"/>
+              <!-- Shirt / shoulders -->
+              <ellipse cx="36" cy="76" rx="28" ry="20" fill="#1e40af" clip-path="url(#rClip)"/>
+              <!-- Neck -->
+              <rect x="30" y="50" width="12" height="11" rx="3" fill="#f5c18a" clip-path="url(#rClip)"/>
+              <!-- Head -->
+              <ellipse cx="36" cy="36" rx="15" ry="17" fill="#f5c18a"/>
+              <!-- Hair -->
+              <path d="M 21,32 Q 20,13 36,13 Q 52,13 51,32 Q 49,19 36,19 Q 23,19 21,32 Z" fill="#3b1f08"/>
+              <!-- Eyes -->
+              <ellipse cx="30.5" cy="34" rx="2" ry="2.3" fill="#1a1a1a"/>
+              <ellipse cx="41.5" cy="34" rx="2" ry="2.3" fill="#1a1a1a"/>
+              <circle cx="31.3" cy="33.2" r="0.7" fill="white"/>
+              <circle cx="42.3" cy="33.2" r="0.7" fill="white"/>
+              <!-- Smile -->
+              <path d="M 29,43 Q 36,49 43,43" fill="none" stroke="#bf6f50" stroke-width="1.8" stroke-linecap="round"/>
+              <!-- Headset band -->
+              <path d="M 21,31 A 15,15 0 0 1 51,31" fill="none" stroke="#222" stroke-width="3.5" stroke-linecap="round"/>
+              <!-- Left ear cup -->
+              <rect x="16.5" y="28" width="7" height="10" rx="3.5" fill="#222"/>
+              <!-- Right ear cup -->
+              <rect x="48.5" y="28" width="7" height="10" rx="3.5" fill="#222"/>
+              <!-- Mic boom -->
+              <path d="M 53,35 Q 53,46 46,48" stroke="#222" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+              <!-- Mic head -->
+              <circle cx="45" cy="48.5" r="2.8" fill="#222"/>
+            </svg>
+          </div>
           <h3>AI Phone Answering</h3>
           <p>A natural-sounding AI agent answers every inbound call 24/7. It greets callers by your business name, captures their info, and handles common questions — just like a trained receptionist.</p>
           <ul class="service-card__list">
