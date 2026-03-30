@@ -652,6 +652,32 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   margin-bottom: 20px;
 }
 
+.testimonial__stat {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+  line-height: 1.1;
+}
+
+.testimonial__outcome {
+  font-size: .9375rem;
+  color: var(--slate-700);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.results__disclaimer {
+  text-align: center;
+  font-style: italic;
+  color: var(--slate-500);
+  font-size: .875rem;
+  margin-top: 32px;
+}
+
 .testimonial__author {
   display: flex;
   align-items: center;
