@@ -202,6 +202,86 @@
     </div>
   </section>
 
+  <!-- MISSED CALL REVENUE CALCULATOR -->
+  <section class="calculator section" id="calculator">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Revenue Calculator</span>
+        <h2 class="section-title">How Much Are Missed Calls Costing You?</h2>
+        <p class="section-sub">Most Panhandle home service companies lose $3,000–$8,000 every month to unanswered calls. Find out your number.</p>
+      </div>
+      <div class="calc__body">
+
+        <!-- Inputs -->
+        <div class="calc__inputs-panel">
+          <div class="calc__field">
+            <div class="calc__field-header">
+              <label for="missedCalls">How many calls do you miss per week?</label>
+              <span class="calc__value" id="missedCallsVal">10 missed calls/week</span>
+            </div>
+            <input type="range" id="missedCalls" class="calc__slider" min="1" max="50" value="10" step="1" />
+            <div class="calc__track-labels"><span>1</span><span>50</span></div>
+          </div>
+
+          <div class="calc__field">
+            <div class="calc__field-header">
+              <label for="jobValue">What is your average job value?</label>
+              <span class="calc__value" id="jobValueVal">$350 per job</span>
+            </div>
+            <input type="range" id="jobValue" class="calc__slider" min="100" max="3000" value="350" step="50" />
+            <div class="calc__track-labels"><span>$100</span><span>$3,000</span></div>
+            <p class="calc__helper">HVAC avg: $450 · Plumbing avg: $380 · Pool service avg: $220</p>
+          </div>
+
+          <div class="calc__field">
+            <div class="calc__field-header">
+              <label for="bookRate">What % of callers book if someone answers?</label>
+              <span class="calc__value" id="bookRateVal">40% book rate</span>
+            </div>
+            <input type="range" id="bookRate" class="calc__slider" min="10" max="90" value="40" step="1" />
+            <div class="calc__track-labels"><span>10%</span><span>90%</span></div>
+            <p class="calc__helper">Industry average for answered calls is 35–45%</p>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div class="calc__results-col">
+          <div class="calc__results-grid">
+            <div class="calc__card calc__card--loss">
+              <div class="calc__card-value" id="monthlyLost">$0</div>
+              <div class="calc__card-label">Monthly Revenue Lost</div>
+              <div class="calc__card-sub">Slipping through the cracks every month</div>
+            </div>
+            <div class="calc__card calc__card--loss">
+              <div class="calc__card-value" id="annualLost">$0</div>
+              <div class="calc__card-label">Annual Revenue Lost</div>
+              <div class="calc__card-sub">That's real money leaving your business</div>
+            </div>
+            <div class="calc__card calc__card--gain">
+              <div class="calc__card-value" id="recoverable">$0</div>
+              <div class="calc__card-label">Recoverable With Coastal Call Flow</div>
+              <div class="calc__card-sub">What we'd put back in your pocket monthly</div>
+            </div>
+            <div class="calc__card calc__card--gain calc__card--featured">
+              <div class="calc__card-value" id="netGain">$0</div>
+              <div class="calc__card-label">Your Net Monthly Gain</div>
+              <div class="calc__card-sub">After our monthly fee</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.calc__body -->
+
+      <p class="calc__insight" id="calcInsight"></p>
+
+      <div class="calc__cta-wrap">
+        <a href="#contact" class="btn btn--primary btn--lg">See How We Fix This — Book a Free Demo</a>
+      </div>
+
+      <p class="calc__disclaimer">Estimates based on industry averages for home service companies in Northwest Florida. Actual results vary by business and market.</p>
+    </div>
+  </section>
+
   <!-- HOW IT WORKS -->
   <section class="how-it-works section section--alt" id="how-it-works">
     <div class="container">

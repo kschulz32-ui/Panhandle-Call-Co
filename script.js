@@ -140,3 +140,104 @@ if (phoneInput) {
     e.target.value = val;
   });
 }
+
+
+// ---- REVENUE CALCULATOR ----
+(function () {
+  const missedCallsSlider = document.getElementById('missedCalls');
+  if (!missedCallsSlider) return;
+
+  const jobValueSlider   = document.getElementById('jobValue');
+  const bookRateSlider   = document.getElementById('bookRate');
+
+  const missedCallsVal   = document.getElementById('missedCallsVal');
+  const jobValueVal      = document.getElementById('jobValueVal');
+  const bookRateVal      = document.getElementById('bookRateVal');
+
+  const monthlyLostEl    = document.getElementById('monthlyLost');
+  const annualLostEl     = document.getElementById('annualLost');
+  const recoverableEl    = document.getElementById('recoverable');
+  const netGainEl        = document.getElementById('netGain');
+  const insightEl        = document.getElementById('calcInsight');
+
+  // Track currently displayed (animated) values
+  const displayed = { monthlyLost: 0, annualLost: 0, recoverable: 0, netGain: 0 };
+  const animFrames = {};
+
+  function formatDollars(n) {
+    const abs = Math.abs(Math.round(n));
+    const str = abs.toLocaleString('en-US');
+    return n < 0 ? '-$' + str : '$' + str;
+  }
+
+  function setSliderFill(slider) {
+    const min = +slider.min, max = +slider.max, val = +slider.value;
+    const pct = ((val - min) / (max - min)) * 100;
+    slider.style.setProperty('--fill', pct + '%');
+  }
+
+  function animateTo(key, el, target) {
+    cancelAnimationFrame(animFrames[key]);
+    const from = displayed[key];
+    const start = performance.now();
+    const dur = 380;
+
+    function step(now) {
+      const t = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const cur = from + (target - from) * eased;
+      displayed[key] = cur;
+      el.textContent = formatDollars(cur);
+      if (t < 1) {
+        animFrames[key] = requestAnimationFrame(step);
+      } else {
+        displayed[key] = target;
+        el.textContent = formatDollars(target);
+      }
+    }
+    animFrames[key] = requestAnimationFrame(step);
+  }
+
+  function calculate() {
+    const missed   = +missedCallsSlider.value;
+    const jobVal   = +jobValueSlider.value;
+    const rate     = +bookRateSlider.value / 100;
+
+    const weeklyLost  = missed * jobVal * rate;
+    const monthly     = weeklyLost * 4.33;
+    const annual      = monthly * 12;
+    const recoverable = monthly * 0.80;
+    const netGain     = recoverable - 397;
+
+    // Update label readouts
+    missedCallsVal.textContent = missed + ' missed calls/week';
+    jobValueVal.textContent    = '$' + jobVal.toLocaleString('en-US') + ' per job';
+    bookRateVal.textContent    = +bookRateSlider.value + '% book rate';
+
+    // Update slider fill gradients
+    setSliderFill(missedCallsSlider);
+    setSliderFill(jobValueSlider);
+    setSliderFill(bookRateSlider);
+
+    // Animate result cards
+    animateTo('monthlyLost',  monthlyLostEl,  monthly);
+    animateTo('annualLost',   annualLostEl,   annual);
+    animateTo('recoverable',  recoverableEl,  recoverable);
+    animateTo('netGain',      netGainEl,      netGain);
+
+    // Dynamic insight line
+    if (monthly < 1000) {
+      insightEl.textContent = `Even at lower call volume, that's ${formatDollars(annual)} per year you're leaving on the table. Our system pays for itself with just 2 recovered jobs.`;
+    } else if (monthly <= 3000) {
+      insightEl.textContent = `That's a full-time employee's salary walking out the door every year. Coastal Call Flow costs less than $400/month to fix it.`;
+    } else {
+      insightEl.textContent = `You're losing serious money every single month. At this call volume, our AI system typically pays for itself in the first week.`;
+    }
+  }
+
+  [missedCallsSlider, jobValueSlider, bookRateSlider].forEach(s => {
+    s.addEventListener('input', calculate);
+  });
+
+  calculate(); // initialise on load
+}());
