@@ -147,51 +147,65 @@ if (phoneInput) {
   const missedCallsSlider = document.getElementById('missedCalls');
   if (!missedCallsSlider) return;
 
-  const jobValueSlider   = document.getElementById('jobValue');
-  const bookRateSlider   = document.getElementById('bookRate');
+  const jobValueSlider  = document.getElementById('jobValue');
+  const bookRateSlider  = document.getElementById('bookRate');
 
-  const missedCallsVal   = document.getElementById('missedCallsVal');
-  const jobValueVal      = document.getElementById('jobValueVal');
-  const bookRateVal      = document.getElementById('bookRateVal');
+  const missedCallsVal  = document.getElementById('missedCallsVal');
+  const jobValueVal     = document.getElementById('jobValueVal');
+  const bookRateVal     = document.getElementById('bookRateVal');
 
-  const monthlyLostEl    = document.getElementById('monthlyLost');
-  const annualLostEl     = document.getElementById('annualLost');
-  const recoverableEl    = document.getElementById('recoverable');
-  const netGainEl        = document.getElementById('netGain');
-  const insightEl        = document.getElementById('calcInsight');
+  const monthlyLostEl   = document.getElementById('monthlyLost');
+  const annualLostEl    = document.getElementById('annualLost');
+  const recoverableEl   = document.getElementById('recoverable');
+  const netGainEl       = document.getElementById('netGain');
+  const insightEl       = document.getElementById('calcInsight');
 
-  // Track currently displayed (animated) values
-  const displayed = { monthlyLost: 0, annualLost: 0, recoverable: 0, netGain: 0 };
+  // Bail out early if any required element is missing
+  if (!jobValueSlider || !bookRateSlider ||
+      !monthlyLostEl  || !annualLostEl   ||
+      !recoverableEl  || !netGainEl      || !insightEl) return;
+
   const animFrames = {};
+  // Tracks the last value that was displayed so animations start from the right place
+  const displayed  = { monthlyLost: 0, annualLost: 0, recoverable: 0, netGain: 0 };
 
   function formatDollars(n) {
-    const abs = Math.abs(Math.round(n));
-    const str = abs.toLocaleString('en-US');
-    return n < 0 ? '-$' + str : '$' + str;
+    const rounded = Math.round(n);
+    const abs = Math.abs(rounded).toLocaleString('en-US');
+    return rounded < 0 ? '-$' + abs : '$' + abs;
   }
 
   function setSliderFill(slider) {
-    const min = +slider.min, max = +slider.max, val = +slider.value;
-    const pct = ((val - min) / (max - min)) * 100;
-    slider.style.setProperty('--fill', pct + '%');
+    const pct = ((+slider.value - +slider.min) / (+slider.max - +slider.min)) * 100;
+    slider.style.setProperty('--fill', pct.toFixed(1) + '%');
   }
 
+  // Always sets the value synchronously (so it's never stuck at $0),
+  // then layers a smooth count-up animation on top for visual polish.
   function animateTo(key, el, target) {
     cancelAnimationFrame(animFrames[key]);
+
+    // ── Synchronous baseline: value is always correct immediately ──
+    el.textContent = formatDollars(target);
+
     const from = displayed[key];
-    const start = performance.now();
-    const dur = 380;
+    displayed[key] = target;
+
+    // Skip animation when change is trivial
+    if (Math.abs(target - from) < 2) return;
+
+    // ── Animated count-up (purely cosmetic) ──
+    let startTime = null; // initialised inside the first rAF frame to avoid timing mismatch
 
     function step(now) {
-      const t = Math.min((now - start) / dur, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
+      if (startTime === null) startTime = now;
+      const t = Math.min((now - startTime) / 380, 1);
+      const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
       const cur = from + (target - from) * eased;
-      displayed[key] = cur;
       el.textContent = formatDollars(cur);
       if (t < 1) {
         animFrames[key] = requestAnimationFrame(step);
       } else {
-        displayed[key] = target;
         el.textContent = formatDollars(target);
       }
     }
@@ -199,12 +213,12 @@ if (phoneInput) {
   }
 
   function calculate() {
-    const missed   = +missedCallsSlider.value;
-    const jobVal   = +jobValueSlider.value;
-    const rate     = +bookRateSlider.value / 100;
+    const missed  = +missedCallsSlider.value;
+    const jobVal  = +jobValueSlider.value;
+    const rate    = +bookRateSlider.value / 100;
 
-    const weeklyLost  = missed * jobVal * rate;
-    const monthly     = weeklyLost * 4.33;
+    const weekly      = missed * jobVal * rate;
+    const monthly     = weekly * 4.33;
     const annual      = monthly * 12;
     const recoverable = monthly * 0.80;
     const netGain     = recoverable - 397;
@@ -219,11 +233,11 @@ if (phoneInput) {
     setSliderFill(jobValueSlider);
     setSliderFill(bookRateSlider);
 
-    // Animate result cards
-    animateTo('monthlyLost',  monthlyLostEl,  monthly);
-    animateTo('annualLost',   annualLostEl,   annual);
-    animateTo('recoverable',  recoverableEl,  recoverable);
-    animateTo('netGain',      netGainEl,      netGain);
+    // Update result cards
+    animateTo('monthlyLost', monthlyLostEl, monthly);
+    animateTo('annualLost',  annualLostEl,  annual);
+    animateTo('recoverable', recoverableEl, recoverable);
+    animateTo('netGain',     netGainEl,     netGain);
 
     // Dynamic insight line
     if (monthly < 1000) {
@@ -239,5 +253,5 @@ if (phoneInput) {
     s.addEventListener('input', calculate);
   });
 
-  calculate(); // initialise on load
+  calculate(); // run immediately on page load
 }());
