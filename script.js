@@ -107,22 +107,43 @@ document.querySelectorAll('.faq-question').forEach(button => {
 
 
 // ---- CONTACT FORM ----
+// Setup: sign up free at https://formspree.io, create a form pointed at
+// kevin@coastalcallflow.com, then replace the placeholder ID below.
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/REPLACE_WITH_YOUR_FORM_ID';
+
 const contactForm = document.getElementById('contactForm');
 const formSuccess = document.getElementById('formSuccess');
 
 if (contactForm) {
-  contactForm.addEventListener('submit', e => {
+  contactForm.addEventListener('submit', async e => {
     e.preventDefault();
 
     const btn = contactForm.querySelector('button[type="submit"]');
     btn.textContent = 'Sending...';
     btn.disabled = true;
 
-    // Simulate async submission (replace with real API call)
-    setTimeout(() => {
-      contactForm.style.display = 'none';
-      formSuccess.style.display = 'flex';
-    }, 1200);
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        contactForm.style.display = 'none';
+        formSuccess.style.display = 'flex';
+      } else {
+        const data = await res.json().catch(() => ({}));
+        const msg = data.errors ? data.errors.map(err => err.message).join(', ') : 'Submission failed.';
+        alert('There was a problem: ' + msg + '\n\nPlease call us at (678) 559-4771.');
+        btn.textContent = 'Book My Free Demo →';
+        btn.disabled = false;
+      }
+    } catch {
+      alert('Network error — please check your connection or call us directly at (678) 559-4771.');
+      btn.textContent = 'Book My Free Demo →';
+      btn.disabled = false;
+    }
   });
 }
 
